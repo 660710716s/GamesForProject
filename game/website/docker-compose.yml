@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: puzzle-backend
+    volumes:
+      - ./backend:/app
+      - ./backend/puzzle_game.db:/app/puzzle_game.db
+    ports:
+      - "8000:8000"
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=/api
+    container_name: puzzle-frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  db_data:
